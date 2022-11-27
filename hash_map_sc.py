@@ -95,12 +95,26 @@ class HashMap:
         # check load:
         #   if current load factor is >= 1.0:
         #       double capacity (capacity must be prime)
+        if self.table_load() >= 1.0:
+            double_cap = self._capacity * 2
+            self.resize_table(double_cap)
 
         # hash key with hash function
         # find bucket at hash location
         # replace value or create new key/value at that bucket
+        # update size data member
 
-        pass
+        hash_val = self._hash_function(key)
+        index = hash_val % self._capacity
+        bucket = self._buckets[index]
+
+        node = bucket.contains(key)
+        # if bucket has empty linked list, or key does not exist inside bucket:
+        if node is None:
+            bucket.insert(key, value)
+        else:
+            node.value = value
+        self._size += 1
 
     def empty_buckets(self) -> int:
         """
