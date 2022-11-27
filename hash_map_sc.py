@@ -180,19 +180,29 @@ class HashMap:
         """
         TODO: Write this implementation
         """
-
+        ret_val = None
+        for i in range(self._buckets.length()):
+            if self._buckets[i].contains(key) is not None:
+                ret_val = self._buckets[i].contains(key).value
+        return ret_val
 
     def contains_key(self, key: str) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        for i in range(self._buckets.length()):
+            if self._buckets[i].contains(key) is not None:
+                return True
+        return False
 
     def remove(self, key: str) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        for i in range(self._buckets.length()):
+            if self._buckets[i].contains(key) is not None:
+                self._buckets[i].remove(key)
+                self._size -= 1
 
     def get_keys_and_values(self) -> DynamicArray:
         """
