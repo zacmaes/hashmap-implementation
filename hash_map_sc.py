@@ -92,6 +92,14 @@ class HashMap:
         """
         TODO: Write this implementation
         """
+        # check load:
+        #   if current load factor is >= 1.0:
+        #       double capacity (capacity must be prime)
+
+        # hash key with hash function
+        # find bucket at hash location
+        # replace value or create new key/value at that bucket
+
         pass
 
     def empty_buckets(self) -> int:
@@ -104,7 +112,13 @@ class HashMap:
         """
         TODO: Write this implementation
         """
-        pass
+
+        # 𝝺 = n / m
+        # 𝝺 Is the load factor
+        # n is the total number of elements stored in the table
+        # m is the number of buckets
+
+        return self._size / self._capacity
 
     def clear(self) -> None:
         """
