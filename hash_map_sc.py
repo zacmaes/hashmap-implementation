@@ -112,15 +112,20 @@ class HashMap:
         # if bucket has empty linked list, or key does not exist inside bucket:
         if node is None:
             bucket.insert(key, value)
+            self._size += 1
         else:
             node.value = value
-        self._size += 1
 
     def empty_buckets(self) -> int:
         """
         TODO: Write this implementation
         """
-        pass
+
+        count = self._capacity
+        for j in range(self._buckets.length()):
+            if self._buckets[j].length() > 0:
+                count -= 1
+        return count
 
     def table_load(self) -> float:
         """
@@ -138,19 +143,44 @@ class HashMap:
         """
         TODO: Write this implementation
         """
-        pass
+        self._buckets = DynamicArray()
+
+        for j in range(self._capacity):
+            self._buckets.append(LinkedList())
+
+        self._size = 0
 
     def resize_table(self, new_capacity: int) -> None:
         """
         TODO: Write this implementation
         """
-        pass
 
-    def get(self, key: str):
+        if new_capacity < 1:
+            return
+
+        if not self._is_prime(new_capacity):
+            new_capacity = self._next_prime(new_capacity)
+
+        new_buckets = DynamicArray()
+
+        for j in range(new_capacity):
+            new_buckets.append(LinkedList())
+
+        for r in range(self._buckets.length()):
+            if self._buckets[r].length() > 0:
+                for old_node in self._buckets[r]:
+                    new_hash = self._hash_function(old_node.key)
+                    new_index = new_hash % new_capacity
+                    new_buckets[new_index].insert(old_node.key, old_node.value)
+
+        self._buckets = new_buckets
+        self._capacity = new_capacity
+
+    def get(self, key: str) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+
 
     def contains_key(self, key: str) -> bool:
         """
