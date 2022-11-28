@@ -190,7 +190,7 @@ class HashMap:
         probe = initial_index
         j = 0
         while self._buckets[probe] is not None:
-            if self._buckets[probe].key == key:
+            if self._buckets[probe].key == key and not self._buckets[probe].is_tombstone:
                 ret_val = self._buckets[probe].value
                 break
             j += 1
@@ -223,10 +223,10 @@ class HashMap:
         probe = initial_index
         j = 0
         while self._buckets[probe] is not None:
-            if self._buckets[probe].key == key:
+            if self._buckets[probe].key == key and not self._buckets[probe].is_tombstone:
                 # make tombstone
-                self._buckets[probe].key = None
-                self._buckets[probe].value = None
+                # self._buckets[probe].key = None
+                # self._buckets[probe].value = None
                 self._buckets[probe].is_tombstone = True
                 self._size -= 1
                 break
@@ -255,17 +255,44 @@ class HashMap:
                 array.append((key, value))
         return array
 
+    # def __iter__(self):
+    #     """
+    #     TODO: Write this implementation
+    #     """
+    #     return HashmapIterator(self)
+    #
+    # def __next__(self):
+    #     """
+    #     TODO: Write this implementation
+    #     """
+    #     pass
+
     def __iter__(self):
         """
-        TODO: Write this implementation
+        Create iterator variable self._index for loop
+
+        :return: self
         """
-        pass
+        self._index = 0
+        return self
 
     def __next__(self):
         """
-        TODO: Write this implementation
+        Obtains next value and increments iterator variable by 1
+
+        :return: value
         """
-        pass
+        try:
+            bucket = self._buckets[self._index]
+            while bucket is None or bucket.is_tombstone:
+                self._index += 1
+                bucket = self._buckets[self._index]
+
+        except DynamicArrayException:
+            raise StopIteration
+
+        self._index += 1
+        return bucket
 
 
 # ------------------- BASIC TESTING ---------------------------------------- #
