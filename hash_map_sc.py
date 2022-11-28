@@ -208,7 +208,11 @@ class HashMap:
         """
         TODO: Write this implementation
         """
-        pass
+        array = DynamicArray()
+        for i in range(self._buckets.length()):
+            for node in self._buckets[i]:
+                array.append((node.key, node.value))
+        return array
 
 
 def find_mode(da: DynamicArray) -> (DynamicArray, int):
