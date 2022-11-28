@@ -263,10 +263,6 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
     return mode_array, frequency
 
 
-
-
-
-
 # ------------------- BASIC TESTING ---------------------------------------- #
 
 if __name__ == "__main__":

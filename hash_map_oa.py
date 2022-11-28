@@ -89,55 +89,171 @@ class HashMap:
         """
         TODO: Write this implementation
         """
-        pass
+        # use has func to compute initial index
+        # if initial index is empty (None or tombstone), insert element
+        # else not empty, compute next index with probing sequence, make sure to wraparound if necessary
+
+        # quadratic probing:
+        # init_i = original hashed index
+        # j = (1, 2, 3, 4, ...)
+        # new_i = (init_i + j**2) % capacity
+
+        # -----SC CODE---NEEDS to be modified
+
+        # check load:
+        #   if current load factor is >= 0.5:
+        #       double capacity (capacity must be prime)
+        if self.table_load() >= 0.5:
+            double_cap = self._capacity * 2
+            self.resize_table(double_cap)
+
+        # hash key with hash function
+        # find bucket at hash location
+        # replace value or create new key/value at that bucket
+        # update size data member
+
+        hash_val = self._hash_function(key)
+        initial_index = hash_val % self._capacity
+        probe = initial_index
+        j = 0
+        while self._buckets[probe] is not None and not self._buckets[probe].is_tombstone:
+            if self._buckets[probe].key == key:
+                self._buckets[probe].value = value
+                return
+            j += 1
+            probe = (initial_index + (j ** 2)) % self._capacity
+
+        if self._buckets[probe] is None or self._buckets[probe].is_tombstone:
+            self._buckets[probe] = HashEntry(key, value)
+            self._size += 1
+        else:
+            self._buckets[probe].key = key
+            self._buckets[probe].value = value
 
     def table_load(self) -> float:
         """
         TODO: Write this implementation
         """
-        pass
+        # 𝝺 = n / m
+        # 𝝺 Is the load factor
+        # n is the total number of elements stored in the table
+        # m is the number of buckets
+
+        return self._size / self._capacity
 
     def empty_buckets(self) -> int:
         """
         TODO: Write this implementation
         """
-        pass
+        count = self._capacity
+        for j in range(self._buckets.length()):
+            if self._buckets[j] is not None and not self._buckets[j].is_tombstone:
+                count -= 1
+        return count
 
     def resize_table(self, new_capacity: int) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if new_capacity < self._size:
+            return
+
+        if not self._is_prime(new_capacity):
+            new_capacity = self._next_prime(new_capacity)
+
+        # save old keys/values
+        old_data = self.get_keys_and_values()
+
+        # set new cap
+        self._capacity = new_capacity
+        self._size = 0
+
+        # empty old buckets and resize with cap
+        self._buckets = DynamicArray()
+        # for j in range(self._capacity):
+        #     self._buckets.append(LinkedList())
+        for _ in range(self._capacity):
+            self._buckets.append(None)
+
+        for r in range(old_data.length()):
+            curr_key = old_data[r][0]
+            curr_val = old_data[r][1]
+            self.put(curr_key, curr_val)
 
     def get(self, key: str) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        ret_val = None
+        hash_val = self._hash_function(key)
+        initial_index = hash_val % self._capacity
+        probe = initial_index
+        j = 0
+        while self._buckets[probe] is not None:
+            if self._buckets[probe].key == key:
+                ret_val = self._buckets[probe].value
+                break
+            j += 1
+            probe = (initial_index + (j ** 2)) % self._capacity
+
+        return ret_val
 
     def contains_key(self, key: str) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        hash_val = self._hash_function(key)
+        initial_index = hash_val % self._capacity
+        probe = initial_index
+        j = 0
+        while self._buckets[probe] is not None:
+            if self._buckets[probe].key == key:
+                return True
+            j += 1
+            probe = (initial_index + (j ** 2)) % self._capacity
+
+        return False
 
     def remove(self, key: str) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        hash_val = self._hash_function(key)
+        initial_index = hash_val % self._capacity
+        probe = initial_index
+        j = 0
+        while self._buckets[probe] is not None:
+            if self._buckets[probe].key == key:
+                # make tombstone
+                self._buckets[probe].key = None
+                self._buckets[probe].value = None
+                self._buckets[probe].is_tombstone = True
+                self._size -= 1
+                break
+            j += 1
+            probe = (initial_index + (j ** 2)) % self._capacity
 
     def clear(self) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        self._buckets = DynamicArray()
+        for _ in range(self._capacity):
+            self._buckets.append(None)
+
+        self._size = 0
 
     def get_keys_and_values(self) -> DynamicArray:
         """
         TODO: Write this implementation
         """
-        pass
+        array = DynamicArray()
+        for i in range(self._buckets.length()):
+            if self._buckets[i] is not None and not self._buckets[i].is_tombstone:
+                key = self._buckets[i].key
+                value = self._buckets[i].value
+                array.append((key, value))
+        return array
 
     def __iter__(self):
         """
@@ -161,6 +277,7 @@ if __name__ == "__main__":
     m = HashMap(53, hash_function_1)
     for i in range(150):
         m.put('str' + str(i), i * 100)
+        # print(m)
         if i % 25 == 24:
             print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
 
