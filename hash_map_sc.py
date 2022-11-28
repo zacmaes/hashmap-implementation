@@ -155,26 +155,91 @@ class HashMap:
         TODO: Write this implementation
         """
 
+        # # attempt to fix gradescope.... not working yet
+        # if new_capacity < 1:
+        #     return
+        #
+        # if not self._is_prime(new_capacity):
+        #     new_capacity = self._next_prime(new_capacity)
+        #
+        # # new_buckets = DynamicArray()
+        # self._capacity = new_capacity
+        # old_buckets = self._buckets
+        #
+        # # for j in range(new_capacity):
+        # #     new_buckets.append(LinkedList())
+        #
+        # self._buckets = DynamicArray()
+        #
+        # # capacity must be a prime number
+        # for _ in range(self._capacity):
+        #     self._buckets.append(LinkedList())
+        #
+        # for r in range(old_buckets.length()):
+        #     if old_buckets[r].length() > 0:
+        #         for old_node in old_buckets[r]:
+        #             self.put(old_node.key, old_node.value)
+        # # ----------------------------------------------------
+
+
+        # # this code kinda works...
+        #
+        # if new_capacity < 1:
+        #     return
+        #
+        # if not self._is_prime(new_capacity):
+        #     new_capacity = self._next_prime(new_capacity)
+        #
+        # new_buckets = DynamicArray()
+        #
+        # for j in range(new_capacity):
+        #     new_buckets.append(LinkedList())
+        #
+        # for r in range(self._buckets.length()):
+        #     if self._buckets[r].length() > 0:
+        #         for old_node in self._buckets[r]:
+        #             new_hash = self._hash_function(old_node.key)
+        #             new_index = new_hash % new_capacity
+        #             new_buckets[new_index].insert(old_node.key, old_node.value)
+        #
+        # self._buckets = new_buckets
+        # self._capacity = new_capacity
+
+        # -----------------------------------------------------------------
+
+        # this code kinda works...
+
         if new_capacity < 1:
             return
 
         if not self._is_prime(new_capacity):
             new_capacity = self._next_prime(new_capacity)
 
-        new_buckets = DynamicArray()
+        # save old keys/values
+        old_data = self.get_keys_and_values()
 
-        for j in range(new_capacity):
-            new_buckets.append(LinkedList())
-
-        for r in range(self._buckets.length()):
-            if self._buckets[r].length() > 0:
-                for old_node in self._buckets[r]:
-                    new_hash = self._hash_function(old_node.key)
-                    new_index = new_hash % new_capacity
-                    new_buckets[new_index].insert(old_node.key, old_node.value)
-
-        self._buckets = new_buckets
+        # set new cap
         self._capacity = new_capacity
+        self._size = 0
+
+        # empty old buckets and resize with cap
+        self._buckets = DynamicArray()
+        for j in range(self._capacity):
+            self._buckets.append(LinkedList())
+
+        for r in range(old_data.length()):
+            curr_key = old_data[r][0]
+            curr_val = old_data[r][1]
+            self.put(curr_key, curr_val)
+
+            # if self._buckets[r].length() > 0:
+            #     for old_node in self._buckets[r]:
+            #         new_hash = self._hash_function(old_node.key)
+            #         new_index = new_hash % new_capacity
+            #         new_buckets[new_index].insert(old_node.key, old_node.value)
+
+        # self._buckets = new_buckets
+        # self._capacity = new_capacity
 
     def get(self, key: str) -> object:
         """
@@ -323,6 +388,8 @@ if __name__ == "__main__":
     for key in keys:
         m.put(str(key), key * 42)
     print(m.get_size(), m.get_capacity())
+    # print(m)
+    # print("====================")
 
     for capacity in range(111, 1000, 117):
         m.resize_table(capacity)
