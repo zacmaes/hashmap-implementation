@@ -155,60 +155,6 @@ class HashMap:
         TODO: Write this implementation
         """
 
-        # # attempt to fix gradescope.... not working yet
-        # if new_capacity < 1:
-        #     return
-        #
-        # if not self._is_prime(new_capacity):
-        #     new_capacity = self._next_prime(new_capacity)
-        #
-        # # new_buckets = DynamicArray()
-        # self._capacity = new_capacity
-        # old_buckets = self._buckets
-        #
-        # # for j in range(new_capacity):
-        # #     new_buckets.append(LinkedList())
-        #
-        # self._buckets = DynamicArray()
-        #
-        # # capacity must be a prime number
-        # for _ in range(self._capacity):
-        #     self._buckets.append(LinkedList())
-        #
-        # for r in range(old_buckets.length()):
-        #     if old_buckets[r].length() > 0:
-        #         for old_node in old_buckets[r]:
-        #             self.put(old_node.key, old_node.value)
-        # # ----------------------------------------------------
-
-
-        # # this code kinda works...
-        #
-        # if new_capacity < 1:
-        #     return
-        #
-        # if not self._is_prime(new_capacity):
-        #     new_capacity = self._next_prime(new_capacity)
-        #
-        # new_buckets = DynamicArray()
-        #
-        # for j in range(new_capacity):
-        #     new_buckets.append(LinkedList())
-        #
-        # for r in range(self._buckets.length()):
-        #     if self._buckets[r].length() > 0:
-        #         for old_node in self._buckets[r]:
-        #             new_hash = self._hash_function(old_node.key)
-        #             new_index = new_hash % new_capacity
-        #             new_buckets[new_index].insert(old_node.key, old_node.value)
-        #
-        # self._buckets = new_buckets
-        # self._capacity = new_capacity
-
-        # -----------------------------------------------------------------
-
-        # this code kinda works...
-
         if new_capacity < 1:
             return
 
@@ -231,15 +177,6 @@ class HashMap:
             curr_key = old_data[r][0]
             curr_val = old_data[r][1]
             self.put(curr_key, curr_val)
-
-            # if self._buckets[r].length() > 0:
-            #     for old_node in self._buckets[r]:
-            #         new_hash = self._hash_function(old_node.key)
-            #         new_index = new_hash % new_capacity
-            #         new_buckets[new_index].insert(old_node.key, old_node.value)
-
-        # self._buckets = new_buckets
-        # self._capacity = new_capacity
 
     def get(self, key: str) -> object:
         """
@@ -287,6 +224,47 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
     # if you'd like to use a hash map,
     # use this instance of your Separate Chaining HashMap
     map = HashMap()
+
+    for index in range(da.length()):
+        # get the current freq of the current key
+        key = da[index]
+        curr_map_value = map.get(key)
+
+        # if map.get() returns None, that means this key has not yet been entered, make it 0
+        if curr_map_value is None:
+            curr_map_value = 0
+
+        # enter key with new freq of that key
+        new_map_value = curr_map_value + 1
+        map.put(key, new_map_value)
+
+        # mode_array_length = mode_array.length()
+        #
+        # # handle return values
+        # if new_map_value > frequency:
+        #     # replace all returns
+        #     # make frequency match new_map_value
+        # elif new_map_value == frequency:
+
+    keys_and_freqs = map.get_keys_and_values()
+    mode_array = DynamicArray()
+    frequency = 0
+
+    for i in range(keys_and_freqs.length()):
+        curr_key = keys_and_freqs[i][0]
+        curr_freq = keys_and_freqs[i][1]
+        if curr_freq > frequency:
+            mode_array = DynamicArray()
+            mode_array.append(curr_key)
+            frequency = curr_freq
+        elif curr_freq == frequency:
+            mode_array.append(curr_key)
+
+    return mode_array, frequency
+
+
+
+
 
 
 # ------------------- BASIC TESTING ---------------------------------------- #
