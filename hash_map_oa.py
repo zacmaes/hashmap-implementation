@@ -3,7 +3,10 @@
 # Course: CS261 - Data Structures
 # Assignment: A6 - Hashmap Implementation
 # Due Date: December 2, 2022
-# Description: * * * * * * * * * * * * *
+# Description:
+#   Implementation of an open addressing hashmap. The map uses quadratic probing and implements its own iterator with
+#   __iter__(), __next__() dunder methods. It also has the following methods: put(), get(), remove(), contains_key(),
+#   clear(), empty_buckets(), resize_table(), table_load(), and get_keys().
 
 from a6_include import (DynamicArray, DynamicArrayException, HashEntry,
                         hash_function_1, hash_function_2)
@@ -87,7 +90,12 @@ class HashMap:
 
     def put(self, key: str, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new key/value pair to the hashmap while checking for load conditions and resizing if necessary.
+
+        :param: key: str
+        :param: value: object
+
+        :return: None: modifies hashmap
         """
         # use has func to compute initial index
         # if initial index is empty (None or tombstone), insert element
@@ -132,18 +140,23 @@ class HashMap:
 
     def table_load(self) -> float:
         """
-        TODO: Write this implementation
+        Calculates the table load and returns that floating point number. It uses the equation below.
+
+            𝝺 = n / m
+            𝝺 Is the load factor
+            n is the total number of elements stored in the table
+            m is the number of buckets
+
+        :return: float: table load
         """
-        # 𝝺 = n / m
-        # 𝝺 Is the load factor
-        # n is the total number of elements stored in the table
-        # m is the number of buckets
 
         return self._size / self._capacity
 
     def empty_buckets(self) -> int:
         """
-        TODO: Write this implementation
+        Returns the number of empty buckets in the hashmap.
+
+        :return: int: number of empty buckets
         """
         count = self._capacity
         for j in range(self._buckets.length()):
@@ -153,7 +166,11 @@ class HashMap:
 
     def resize_table(self, new_capacity: int) -> None:
         """
-        TODO: Write this implementation
+        Resizes the hashmap and re-hashes the keys based upon the new capacity passed.
+
+        :param: new_capacity: int
+
+        :return: None: modifies hashmap
         """
         if new_capacity < self._size:
             return
@@ -182,7 +199,11 @@ class HashMap:
 
     def get(self, key: str) -> object:
         """
-        TODO: Write this implementation
+        Returns the value associated with the passed key param.
+
+        :param: key: str
+
+        :return: object: value in hashmap associated with key
         """
         ret_val = None
         hash_val = self._hash_function(key)
@@ -200,7 +221,11 @@ class HashMap:
 
     def contains_key(self, key: str) -> bool:
         """
-        TODO: Write this implementation
+        Returns a bool of T or F if the key is in found inside the map.
+
+        :param: key: str
+
+        :return: bool: True if key in map, False if key not in map
         """
         hash_val = self._hash_function(key)
         initial_index = hash_val % self._capacity
@@ -216,7 +241,11 @@ class HashMap:
 
     def remove(self, key: str) -> None:
         """
-        TODO: Write this implementation
+        Removes a key/value pair from the hashmap.
+
+        :param: key: str
+
+        :return: None: modifies map in place
         """
         hash_val = self._hash_function(key)
         initial_index = hash_val % self._capacity
@@ -235,7 +264,9 @@ class HashMap:
 
     def clear(self) -> None:
         """
-        TODO: Write this implementation
+        Empties the hashmap in a simple way.
+
+        :return: None: modifies hashmap
         """
         self._buckets = DynamicArray()
         for _ in range(self._capacity):
@@ -245,7 +276,9 @@ class HashMap:
 
     def get_keys_and_values(self) -> DynamicArray:
         """
-        TODO: Write this implementation
+        Returns a dynamic array of tuples containing all of the key/value pairs.
+
+        :return: DynamicArray: array of tuples [(key, value)]
         """
         array = DynamicArray()
         for i in range(self._buckets.length()):
@@ -255,21 +288,9 @@ class HashMap:
                 array.append((key, value))
         return array
 
-    # def __iter__(self):
-    #     """
-    #     TODO: Write this implementation
-    #     """
-    #     return HashmapIterator(self)
-    #
-    # def __next__(self):
-    #     """
-    #     TODO: Write this implementation
-    #     """
-    #     pass
-
     def __iter__(self):
         """
-        Create iterator variable self._index for loop
+        Create iterator variable self._index for loop. Iterator for hashmap.
 
         :return: self
         """
@@ -278,7 +299,7 @@ class HashMap:
 
     def __next__(self):
         """
-        Obtains next value and increments iterator variable by 1
+        Obtains next value and increments iterator variable by 1. Iterator for hashmap
 
         :return: value
         """

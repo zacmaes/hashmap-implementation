@@ -3,7 +3,10 @@
 # Course: CS261 - Data Structures
 # Assignment: A6 - Hashmap Implementation
 # Due Date: December 2, 2022
-# Description: * * * * * * * * * * * * *
+# Description:
+#   Implementation of a chained hash table and a separate method find_mode(). The hash table has multiple
+#   methods including: put(), empty_buckets(), table_load(), clear(), resize_table(), get(), contains_key(), remove(),
+#   and get_keys_and_values().
 
 
 from a6_include import (DynamicArray, LinkedList,
@@ -90,7 +93,12 @@ class HashMap:
 
     def put(self, key: str, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new key/value pair to the hashmap while checking for load conditions and resizing if necessary.
+
+        :param: key: str
+        :param: value: object
+
+        :return: None: modifies hashmap
         """
         # check load:
         #   if current load factor is >= 1.0:
@@ -118,7 +126,9 @@ class HashMap:
 
     def empty_buckets(self) -> int:
         """
-        TODO: Write this implementation
+        Returns the number of empty buckets in the hashmap.
+
+        :return: int: number of empty buckets
         """
 
         count = self._capacity
@@ -129,19 +139,23 @@ class HashMap:
 
     def table_load(self) -> float:
         """
-        TODO: Write this implementation
-        """
+        Calculates the table load and returns that floating point number. It uses the equation below.
 
-        # 𝝺 = n / m
-        # 𝝺 Is the load factor
-        # n is the total number of elements stored in the table
-        # m is the number of buckets
+            𝝺 = n / m
+            𝝺 Is the load factor
+            n is the total number of elements stored in the table
+            m is the number of buckets
+
+        :return: float: table load
+        """
 
         return self._size / self._capacity
 
     def clear(self) -> None:
         """
-        TODO: Write this implementation
+        Empties the hashmap in a simple way.
+
+        :return: None: modifies hashmap
         """
         self._buckets = DynamicArray()
 
@@ -152,7 +166,11 @@ class HashMap:
 
     def resize_table(self, new_capacity: int) -> None:
         """
-        TODO: Write this implementation
+        Resizes the hashmap and re-hashes the keys based upon the new capacity passed.
+
+        :param: new_capacity: int
+
+        :return: None: modifies hashmap
         """
 
         if new_capacity < 1:
@@ -180,7 +198,11 @@ class HashMap:
 
     def get(self, key: str) -> object:
         """
-        TODO: Write this implementation
+        Returns the value associated with the passed key param.
+
+        :param: key: str
+
+        :return: object: value in hashmap associated with key
         """
         ret_val = None
         for i in range(self._buckets.length()):
@@ -190,7 +212,11 @@ class HashMap:
 
     def contains_key(self, key: str) -> bool:
         """
-        TODO: Write this implementation
+        Returns a bool of T or F if the key is in found inside the map.
+
+        :param: key: str
+
+        :return: bool: True if key in map, False if key not in map
         """
         for i in range(self._buckets.length()):
             if self._buckets[i].contains(key) is not None:
@@ -199,7 +225,11 @@ class HashMap:
 
     def remove(self, key: str) -> None:
         """
-        TODO: Write this implementation
+        Removes a key/value pair from the hashmap.
+
+        :param: key: str
+
+        :return: None: modifies map in place
         """
         for i in range(self._buckets.length()):
             if self._buckets[i].contains(key) is not None:
@@ -208,7 +238,9 @@ class HashMap:
 
     def get_keys_and_values(self) -> DynamicArray:
         """
-        TODO: Write this implementation
+        Returns a dynamic array of tuples containing all of the key/value pairs.
+
+        :return: DynamicArray: array of tuples [(key, value)]
         """
         array = DynamicArray()
         for i in range(self._buckets.length()):
@@ -219,7 +251,11 @@ class HashMap:
 
 def find_mode(da: DynamicArray) -> (DynamicArray, int):
     """
-    TODO: Write this implementation
+    Uses a hashmap implementation to find the mode(s) within a passed dynamic array.
+
+    :param: da: DynamicArray
+
+    :return: tuple: (DynamicArray, int) of the mode or modes and the frequency of them.
     """
     # if you'd like to use a hash map,
     # use this instance of your Separate Chaining HashMap
